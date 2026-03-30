@@ -1,326 +1,233 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PC Master Pack Opener</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Calculadora Prank</title>
     <style>
-        :root {
-            --bg-color: #050507;
-            --card-bg: #121216;
-            --accent: #00d4ff;
-            --accent-purple: #9d00ff;
-            --text: #e0e0e0;
-            --glass: rgba(255, 255, 255, 0.05);
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text);
+            font-family: 'Press Start 2P', system-ui;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* --- LADO ESQUERDO: OPENER --- */
-        main {
-            padding: 40px;
-            display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-right: 1px solid rgba(255,255,255,0.1);
         }
-
+        
         h1 {
-            font-family: 'Orbitron', sans-serif;
             font-size: 2rem;
-            margin-bottom: 40px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Roleta / Spinner */
-        .spinner-wrapper {
-            position: relative;
-            width: 800px;
-            height: 200px;
-            background: var(--card-bg);
-            border: 2px solid #222;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-        }
-
-        .spinner-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--accent);
-            z-index: 10;
-            box-shadow: 0 0 15px var(--accent);
-            transform: translateX(-50%);
-        }
-
-        .spinner-track {
-            display: flex;
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            transition: transform 6s cubic-bezier(0.15, 0, 0.05, 1);
-            will-change: transform;
-        }
-
-        .item-card {
-            min-width: 160px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-right: 1px solid #222;
-            background: linear-gradient(180deg, #1a1a20 0%, #121216 100%);
-        }
-
-        .item-card img {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
             margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ff00;
+            letter-spacing: 4px;
         }
-
-        .item-card span {
-            font-size: 0.8rem;
-            text-align: center;
-            padding: 0 5px;
+        
+        .subtitle {
+            font-size: 1rem;
+            color: #00ff00;
+            margin-bottom: 20px;
+            opacity: 0.8;
         }
-
-        button#open-btn {
-            margin-top: 50px;
-            padding: 15px 50px;
-            font-family: 'Orbitron', sans-serif;
-            background: linear-gradient(45deg, var(--accent), var(--accent-purple));
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        button#open-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-        }
-
-        /* --- LADO DIREITO: INVENTÁRIO --- */
-        aside {
-            background: #0d0d0f;
+        
+        .calculator {
+            background: #111;
             padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5),
+                        inset 0 0 20px rgba(255, 255, 255, 0.1);
+            width: 340px;
         }
-
-        h2 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; }
-
-        .inventory-list { margin-top: 20px; flex-grow: 1; }
-
-        .inv-item {
-            background: var(--glass);
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(255,255,255,0.05);
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .inv-item img { width: 40px; height: 40px; }
-
-        /* --- SECÇÃO DE AVALIAÇÃO --- */
-        #evaluation-box {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 212, 255, 0.1);
+        
+        #display {
+            width: 100%;
+            height: 80px;
+            background: #000;
+            color: #00ff00;
+            font-size: 2.2rem;
+            text-align: right;
+            padding: 0 15px;
+            border: none;
             border-radius: 10px;
-            border: 1px solid var(--accent);
-            display: none;
+            margin-bottom: 15px;
+            box-shadow: inset 0 0 15px rgba(0, 255, 0, 0.3);
+            font-family: 'Press Start 2P', monospace;
+            letter-spacing: 2px;
+            overflow: hidden;
         }
-
-        .score-big {
-            font-size: 2.5rem;
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        
+        button {
+            height: 65px;
+            font-size: 1.4rem;
+            font-family: 'Press Start 2P', monospace;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.1s;
+            box-shadow: 0 4px 0 #000;
+        }
+        
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #000;
+        }
+        
+        .number, .decimal {
+            background: #333;
+            color: #fff;
+        }
+        
+        .operator {
+            background: #ff9500;
+            color: #fff;
+            font-size: 1.6rem;
+        }
+        
+        .equals {
+            background: #00ff00;
+            color: #111;
             font-weight: bold;
-            color: var(--accent);
-            text-align: center;
+            grid-column: span 2;
         }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
+        
+        .clear {
+            background: #ff2d55;
+            color: #fff;
+            grid-column: span 2;
+        }
+        
+        .footer {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            opacity: 0.6;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-
-    <main>
-        <h1>PACK OPENER PC</h1>
+    <h1>🧮 CALCULADORA</h1>
+    <p class="subtitle">A calculadora que nunca erra... mas outro já calculou 😏</p>
+    
+    <div class="calculator">
+        <input type="text" id="display" readonly placeholder="0">
         
-        <div class="spinner-wrapper">
-            <div class="spinner-line"></div>
-            <div id="spinner-track" class="spinner-track">
-                </div>
+        <div class="buttons">
+            <!-- Primeira linha -->
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button class="operator" onclick="appendToDisplay('(')">(</button>
+            <button class="operator" onclick="appendToDisplay(')')">)</button>
+            <button class="operator" onclick="appendToDisplay('/')">÷</button>
+            
+            <!-- Segunda linha -->
+            <button class="number" onclick="appendToDisplay('7')">7</button>
+            <button class="number" onclick="appendToDisplay('8')">8</button>
+            <button class="number" onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="appendToDisplay('*')">×</button>
+            
+            <!-- Terceira linha -->
+            <button class="number" onclick="appendToDisplay('4')">4</button>
+            <button class="number" onclick="appendToDisplay('5')">5</button>
+            <button class="number" onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('-')">−</button>
+            
+            <!-- Quarta linha -->
+            <button class="number" onclick="appendToDisplay('1')">1</button>
+            <button class="number" onclick="appendToDisplay('2')">2</button>
+            <button class="number" onclick="appendToDisplay('3')">3</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+            
+            <!-- Quinta linha -->
+            <button class="number" onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
+            <button class="decimal" onclick="appendToDisplay('.')">.</button>
+            <button class="equals" onclick="showPrankResult()">=</button>
         </div>
-
-        <button id="open-btn" onclick="spin()">ABRIR PACK</button>
-    </main>
-
-    <aside>
-        <h2>O TEU SETUP</h2>
-        <div id="inventory" class="inventory-list">
-            </div>
-
-        <div id="evaluation-box">
-            <h3>AVALIAÇÃO REALISTA</h3>
-            <div id="final-score" class="score-big">0/10</div>
-            <p id="eval-text" style="font-size: 0.9rem; line-height: 1.4;"></p>
-        </div>
-    </aside>
+    </div>
+    
+    <div class="footer">
+        Calculadora 100% funcional... até ao resultado 😂<br>
+        <small>Criado especialmente para ti</small>
+    </div>
 
     <script>
-        const cpus = [
-            { nome: "Ryzen 5 7600", img: "imagem_2026-03-30_150616518.png", score: 8, tipo: "CPU" },
-            { nome: "Ryzen 5 5600X", img: "imagem_2026-03-30_150653377.png", score: 7, tipo: "CPU" },
-            { nome: "Ryzen 5 9600X", img: "imagem_2026-03-30_150752972.png", score: 9, tipo: "CPU" },
-            { nome: "Ryzen 3 3200G", img: "imagem_2026-03-30_150837692.png", score: 3, tipo: "CPU" },
-            { nome: "Ryzen 7 5700X", img: "imagem_2026-03-30_150932786.png", score: 7.5, tipo: "CPU" },
-            { nome: "Ryzen 7 5800X", img: "imagem_2026-03-30_151012046.png", score: 8, tipo: "CPU" },
-            { nome: "Ryzen 9 9950X3D", img: "imagem_2026-03-30_151050470.png", score: 10, tipo: "CPU" }
-        ];
-
-        const mobos = [
-            { nome: "ROG Crosshair X870E Glacial", img: "imagem_2026-03-30_151958409.png", score: 10, tipo: "MOBO" },
-            { nome: "MEG X870E Godlike", img: "imagem_2026-03-30_152024352.png", score: 9, tipo: "MOBO" },
-            { nome: "MAG B850 Tomahawk MAX", img: "imagem_2026-03-30_152110069.png", score: 7.5, tipo: "MOBO" },
-            { nome: "Aorus Master X870E", img: "imagem_2026-03-30_152208974.png", score: 8, tipo: "MOBO" },
-            { nome: "MPG Z890 Carbon WiFi", img: "imagem_2026-03-30_152256497.png", score: 6.5, tipo: "MOBO" },
-            { nome: "MSI PRO A620M-E", img: "imagem_2026-03-30_152440251.png", score: 3.5, tipo: "MOBO" },
-            { nome: "Gigabyte B650M DS3H", img: "imagem_2026-03-30_152543629.png", score: 4.5, tipo: "MOBO" }
-        ];
-
-        const allItems = [...cpus, ...mobos];
-        let setup = { CPU: null, MOBO: null };
-
-        function createTrack() {
-            const track = document.getElementById('spinner-track');
-            track.innerHTML = '';
-            // Criar 80 items aleatórios para a roleta
-            for(let i=0; i<80; i++) {
-                const item = allItems[Math.floor(Math.random() * allItems.length)];
-                const div = document.createElement('div');
-                div.className = 'item-card';
-                div.innerHTML = `<img src="${item.img}"><span>${item.nome}</span>`;
-                track.appendChild(div);
+        const WARNING_MESSAGE = "Outro usuário já tem o mesmo resultado!";
+        
+        function appendToDisplay(value) {
+            const display = document.getElementById('display');
+            
+            // Se estiver a mostrar o aviso ou erro, limpa primeiro
+            if (display.value === WARNING_MESSAGE || display.value === 'ERRO!') {
+                display.value = '';
+            }
+            
+            display.value += value;
+        }
+        
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+        
+        function showPrankResult() {
+            const display = document.getElementById('display');
+            
+            // Se já estiver com o aviso, não faz nada
+            if (display.value === WARNING_MESSAGE) return;
+            
+            let resultText = '';
+            
+            try {
+                // Calcula normalmente (mas não vamos mostrar o resultado real)
+                const realResult = eval(display.value);
+                
+                // Em vez do resultado, mostra o aviso prank
+                display.value = WARNING_MESSAGE;
+                
+                // Efeito extra: pisca o aviso
+                display.style.color = '#ff2d55';
+                setTimeout(() => {
+                    display.style.color = '#00ff00';
+                }, 300);
+                
+            } catch (e) {
+                // Se a expressão for inválida
+                display.value = 'ERRO!';
+                display.style.color = '#ff2d55';
+                setTimeout(() => {
+                    display.style.color = '#00ff00';
+                    display.value = '';
+                }, 1500);
             }
         }
-
-        function spin() {
-            const track = document.getElementById('spinner-track');
-            const btn = document.getElementById('open-btn');
-            btn.disabled = true;
+        
+        // Atalho de teclado (divertido)
+        document.addEventListener('keydown', function(e) {
+            const display = document.getElementById('display');
             
-            createTrack();
-            
-            // Definir o vencedor (o item na posição 75)
-            const winnerIndex = 75;
-            const winner = allItems[Math.floor(Math.random() * allItems.length)];
-            
-            // Substituir o item na posição do vencedor
-            const cards = track.getElementsByClassName('item-card');
-            cards[winnerIndex].innerHTML = `<img src="${winner.img}"><span>${winner.nome}</span>`;
-            
-            // Animar (cada card tem 160px)
-            const cardWidth = 160;
-            const centerOffset = 400 - (cardWidth / 2);
-            const targetX = (winnerIndex * cardWidth) - centerOffset;
-            
-            track.style.transition = 'none';
-            track.style.transform = `translateX(0px)`;
-            
-            setTimeout(() => {
-                track.style.transition = 'transform 6s cubic-bezier(0.15, 0, 0.05, 1)';
-                track.style.transform = `translateX(-${targetX}px)`;
-            }, 50);
-
-            setTimeout(() => {
-                addToInventory(winner);
-                btn.disabled = false;
-            }, 6500);
-        }
-
-        function addToInventory(item) {
-            setup[item.tipo] = item;
-            const inv = document.getElementById('inventory');
-            
-            // Atualizar UI do inventário
-            const div = document.createElement('div');
-            div.className = 'inv-item';
-            div.innerHTML = `<img src="${item.img}"> <div><strong>${item.tipo}:</strong><br>${item.nome}</div>`;
-            inv.prepend(div);
-
-            if(setup.CPU && setup.MOBO) {
-                runEvaluation();
+            if (e.key === 'Enter' || e.key === '=') {
+                e.preventDefault();
+                showPrankResult();
             }
-        }
-
-        function runEvaluation() {
-            const box = document.getElementById('evaluation-box');
-            const scoreDiv = document.getElementById('final-score');
-            const textDiv = document.getElementById('eval-text');
             
-            box.style.display = 'block';
-            
-            const avgScore = (setup.CPU.score + setup.MOBO.score) / 2;
-            scoreDiv.innerText = `${avgScore.toFixed(1)}/10`;
-
-            let feedback = "";
-            let upgrade = "";
-
-            // Lógica Realista
-            if(setup.CPU.nome.includes("9950X3D") && setup.MOBO.score >= 9) {
-                feedback = "Tens um PC de elite! Performance máxima para jogos e renderização.";
-                upgrade = "Nada a melhorar. Apenas garante uma RTX 4090!";
-            } else if(setup.CPU.score <= 4 && setup.MOBO.score >= 8) {
-                feedback = "Setup desequilibrado. Tens uma placa excelente para um processador muito fraco.";
-                upgrade = "Troca esse processador por um Ryzen 7 ou 9 urgente.";
-            } else if(setup.CPU.score >= 8 && setup.MOBO.score <= 5) {
-                feedback = "Perigo! O processador é potente demais para esta motherboard (VRMs podem aquecer).";
-                upgrade = "Compra uma motherboard de série X ou B com melhor dissipação.";
-            } else if(avgScore < 5) {
-                feedback = "PC de escritório/entrada.";
-                upgrade = "Upgrade total para AM5 recomendado.";
-            } else {
-                feedback = "Setup sólido e equilibrado para Gaming.";
-                upgrade = "Adiciona 32GB de RAM DDR5 rápida.";
+            if (e.key === 'Escape') {
+                clearDisplay();
             }
-
-            textDiv.innerHTML = `<strong>Análise:</strong> ${feedback}<br><br><strong>Recomendação:</strong> ${upgrade}`;
-        }
-
-        // Inicializar track vazio
-        createTrack();
+            
+            // Permite digitar números diretamente
+            if (/[0-9+\-*/.()]/.test(e.key)) {
+                appendToDisplay(e.key);
+            }
+        });
+        
+        // Mensagem inicial engraçada
+        console.log('%c✅ Calculadora prank carregada com sucesso!', 'color: #00ff00; font-family: monospace; font-size: 14px;');
     </script>
 </body>
 </html>
