@@ -3,201 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PC Component Pack Opener</title>
+    <title>PC Master Pack Opener</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00d4ff;
-            --secondary: #0055ff;
-            --bg: #0a0a0c;
-            --card-bg: #1a1a1e;
-            --text: #ffffff;
+            --bg-color: #050507;
+            --card-bg: #121216;
+            --accent: #00d4ff;
+            --accent-purple: #9d00ff;
+            --text: #e0e0e0;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
             color: var(--text);
+            margin: 0;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- LADO ESQUERDO: OPENER --- */
+        main {
+            padding: 40px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h1 { text-shadow: 0 0 10px var(--primary); }
-
-        /* Estilo do Pack */
-        #pack-container {
-            margin: 40px 0;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        #pack-container:hover {
-            transform: scale(1.05);
-        }
-
-        .pack {
-            width: 200px;
-            height: 280px;
-            background: linear-gradient(45deg, var(--secondary), var(--primary));
-            border-radius: 15px;
-            display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 1.5rem;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-            border: 2px solid white;
+            border-right: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Card do Componente Revelado */
-        #reveal-area {
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Roleta / Spinner */
+        .spinner-wrapper {
+            position: relative;
+            width: 800px;
+            height: 200px;
+            background: var(--card-bg);
+            border: 2px solid #222;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .spinner-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent);
+            z-index: 10;
+            box-shadow: 0 0 15px var(--accent);
+            transform: translateX(-50%);
+        }
+
+        .spinner-track {
+            display: flex;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            transition: transform 6s cubic-bezier(0.15, 0, 0.05, 1);
+            will-change: transform;
+        }
+
+        .item-card {
+            min-width: 160px;
+            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 400px;
+            justify-content: center;
+            border-right: 1px solid #222;
+            background: linear-gradient(180deg, #1a1a20 0%, #121216 100%);
         }
 
-        .component-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 20px;
+        .item-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .item-card span {
+            font-size: 0.8rem;
             text-align: center;
-            border: 2px solid var(--primary);
-            animation: fadeIn 0.5s ease-out;
-            max-width: 300px;
+            padding: 0 5px;
         }
 
-        .component-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 15px;
+        button#open-btn {
+            margin-top: 50px;
+            padding: 15px 50px;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(45deg, var(--accent), var(--accent-purple));
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        /* Avaliação */
-        #evaluation-section {
-            margin-top: 30px;
+        button#open-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        /* --- LADO DIREITO: INVENTÁRIO --- */
+        aside {
+            background: #0d0d0f;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; }
+
+        .inventory-list { margin-top: 20px; flex-grow: 1; }
+
+        .inv-item {
+            background: var(--glass);
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .inv-item img { width: 40px; height: 40px; }
+
+        /* --- SECÇÃO DE AVALIAÇÃO --- */
+        #evaluation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.1);
             border-radius: 10px;
-            max-width: 600px;
-            width: 100%;
+            border: 1px solid var(--accent);
             display: none;
         }
 
-        .rating-score {
-            font-size: 2rem;
-            color: var(--primary);
+        .score-big {
+            font-size: 2.5rem;
             font-weight: bold;
+            color: var(--accent);
+            text-align: center;
         }
 
-        button {
-            background: var(--primary);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            color: black;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        button:hover { background: white; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
     </style>
 </head>
 <body>
 
-    <h1>Simulador de Packs PC</h1>
-    <p>Clica no pack para obteres o teu CPU!</p>
-
-    <div id="pack-container" onclick="openPack()">
-        <div class="pack">? PACK CPU ?</div>
-    </div>
-
-    <div id="reveal-area">
+    <main>
+        <h1>PACK OPENER PC</h1>
+        
+        <div class="spinner-wrapper">
+            <div class="spinner-line"></div>
+            <div id="spinner-track" class="spinner-track">
+                </div>
         </div>
 
-    <div id="evaluation-section" id="evaluation-section">
-        <h2>Avaliação do Setup</h2>
-        <div id="evaluation-content"></div>
-        <button onclick="reset()">Tentar de Novo</button>
-    </div>
+        <button id="open-btn" onclick="spin()">ABRIR PACK</button>
+    </main>
+
+    <aside>
+        <h2>O TEU SETUP</h2>
+        <div id="inventory" class="inventory-list">
+            </div>
+
+        <div id="evaluation-box">
+            <h3>AVALIAÇÃO REALISTA</h3>
+            <div id="final-score" class="score-big">0/10</div>
+            <p id="eval-text" style="font-size: 0.9rem; line-height: 1.4;"></p>
+        </div>
+    </aside>
 
     <script>
-        // Base de dados dos componentes (com os nomes de ficheiro que deste)
         const cpus = [
-            { nome: "Ryzen 5 7600", img: "imagem_2026-03-30_150616518.png", score: 8, tier: "Mid-High" },
-            { nome: "Ryzen 5 5600X", img: "imagem_2026-03-30_150653377.png", score: 7, tier: "Mid" },
-            { nome: "Ryzen 5 9600X", img: "imagem_2026-03-30_150752972.png", score: 9, tier: "High" },
-            { nome: "Ryzen 3 3200G", img: "imagem_2026-03-30_150837692.png", score: 3, tier: "Entry" },
-            { nome: "Ryzen 7 5700X", img: "imagem_2026-03-30_150932786.png", score: 7.5, tier: "Mid-High" },
-            { nome: "Ryzen 7 5800X", img: "imagem_2026-03-30_151012046.png", score: 8, tier: "High-Mid" },
-            { nome: "Ryzen 9 9950X3D", img: "imagem_2026-03-30_151050470.png", score: 10, tier: "God Tier" }
+            { nome: "Ryzen 5 7600", img: "imagem_2026-03-30_150616518.png", score: 8, tipo: "CPU" },
+            { nome: "Ryzen 5 5600X", img: "imagem_2026-03-30_150653377.png", score: 7, tipo: "CPU" },
+            { nome: "Ryzen 5 9600X", img: "imagem_2026-03-30_150752972.png", score: 9, tipo: "CPU" },
+            { nome: "Ryzen 3 3200G", img: "imagem_2026-03-30_150837692.png", score: 3, tipo: "CPU" },
+            { nome: "Ryzen 7 5700X", img: "imagem_2026-03-30_150932786.png", score: 7.5, tipo: "CPU" },
+            { nome: "Ryzen 7 5800X", img: "imagem_2026-03-30_151012046.png", score: 8, tipo: "CPU" },
+            { nome: "Ryzen 9 9950X3D", img: "imagem_2026-03-30_151050470.png", score: 10, tipo: "CPU" }
         ];
 
-        let selectedCPU = null;
+        const mobos = [
+            { nome: "ROG Crosshair X870E Glacial", img: "imagem_2026-03-30_151958409.png", score: 10, tipo: "MOBO" },
+            { nome: "MEG X870E Godlike", img: "imagem_2026-03-30_152024352.png", score: 9, tipo: "MOBO" },
+            { nome: "MAG B850 Tomahawk MAX", img: "imagem_2026-03-30_152110069.png", score: 7.5, tipo: "MOBO" },
+            { nome: "Aorus Master X870E", img: "imagem_2026-03-30_152208974.png", score: 8, tipo: "MOBO" },
+            { nome: "MPG Z890 Carbon WiFi", img: "imagem_2026-03-30_152256497.png", score: 6.5, tipo: "MOBO" },
+            { nome: "MSI PRO A620M-E", img: "imagem_2026-03-30_152440251.png", score: 3.5, tipo: "MOBO" },
+            { nome: "Gigabyte B650M DS3H", img: "imagem_2026-03-30_152543629.png", score: 4.5, tipo: "MOBO" }
+        ];
 
-        function openPack() {
-            // Esconder o pack após clicar
-            document.getElementById('pack-container').style.display = 'none';
-            
-            // Escolher um CPU aleatório
-            const randomIndex = Math.floor(Math.random() * cpus.length);
-            selectedCPU = cpus[randomIndex];
+        const allItems = [...cpus, ...mobos];
+        let setup = { CPU: null, MOBO: null };
 
-            // Mostrar o card
-            const revealArea = document.getElementById('reveal-area');
-            revealArea.innerHTML = `
-                <div class="component-card">
-                    <img src="${selectedCPU.img}" alt="${selectedCPU.nome}">
-                    <h3>${selectedCPU.nome}</h3>
-                    <p>Tier: ${selectedCPU.tier}</p>
-                    <button onclick="showEvaluation()">Ver Avaliação Final</button>
-                </div>
-            `;
+        function createTrack() {
+            const track = document.getElementById('spinner-track');
+            track.innerHTML = '';
+            // Criar 80 items aleatórios para a roleta
+            for(let i=0; i<80; i++) {
+                const item = allItems[Math.floor(Math.random() * allItems.length)];
+                const div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `<img src="${item.img}"><span>${item.nome}</span>`;
+                track.appendChild(div);
+            }
         }
 
-        function showEvaluation() {
-            const evalSection = document.getElementById('evaluation-section');
-            const evalContent = document.getElementById('evaluation-content');
-            evalSection.style.display = 'block';
+        function spin() {
+            const track = document.getElementById('spinner-track');
+            const btn = document.getElementById('open-btn');
+            btn.disabled = true;
+            
+            createTrack();
+            
+            // Definir o vencedor (o item na posição 75)
+            const winnerIndex = 75;
+            const winner = allItems[Math.floor(Math.random() * allItems.length)];
+            
+            // Substituir o item na posição do vencedor
+            const cards = track.getElementsByClassName('item-card');
+            cards[winnerIndex].innerHTML = `<img src="${winner.img}"><span>${winner.nome}</span>`;
+            
+            // Animar (cada card tem 160px)
+            const cardWidth = 160;
+            const centerOffset = 400 - (cardWidth / 2);
+            const targetX = (winnerIndex * cardWidth) - centerOffset;
+            
+            track.style.transition = 'none';
+            track.style.transform = `translateX(0px)`;
+            
+            setTimeout(() => {
+                track.style.transition = 'transform 6s cubic-bezier(0.15, 0, 0.05, 1)';
+                track.style.transform = `translateX(-${targetX}px)`;
+            }, 50);
+
+            setTimeout(() => {
+                addToInventory(winner);
+                btn.disabled = false;
+            }, 6500);
+        }
+
+        function addToInventory(item) {
+            setup[item.tipo] = item;
+            const inv = document.getElementById('inventory');
+            
+            // Atualizar UI do inventário
+            const div = document.createElement('div');
+            div.className = 'inv-item';
+            div.innerHTML = `<img src="${item.img}"> <div><strong>${item.tipo}:</strong><br>${item.nome}</div>`;
+            inv.prepend(div);
+
+            if(setup.CPU && setup.MOBO) {
+                runEvaluation();
+            }
+        }
+
+        function runEvaluation() {
+            const box = document.getElementById('evaluation-box');
+            const scoreDiv = document.getElementById('final-score');
+            const textDiv = document.getElementById('eval-text');
+            
+            box.style.display = 'block';
+            
+            const avgScore = (setup.CPU.score + setup.MOBO.score) / 2;
+            scoreDiv.innerText = `${avgScore.toFixed(1)}/10`;
 
             let feedback = "";
-            let melhoria = "";
+            let upgrade = "";
 
-            // Lógica de avaliação baseada no CPU
-            if (selectedCPU.score >= 9) {
-                feedback = "Este PC é uma besta de performance! Estás no topo da tecnologia atual.";
-                melhoria = "Honestamente? Quase nada. Apenas certifica-te de que tens um Cooler de 360mm e uma RTX 4090 para acompanhar.";
-            } else if (selectedCPU.score >= 7) {
-                feedback = "Um excelente PC para Gaming equilibrado e trabalho pesado.";
-                melhoria = "Se quiseres mais frames, no futuro podes saltar para a série 9000 ou garantir que a tua RAM é DDR5 (se o CPU suportar).";
+            // Lógica Realista
+            if(setup.CPU.nome.includes("9950X3D") && setup.MOBO.score >= 9) {
+                feedback = "Tens um PC de elite! Performance máxima para jogos e renderização.";
+                upgrade = "Nada a melhorar. Apenas garante uma RTX 4090!";
+            } else if(setup.CPU.score <= 4 && setup.MOBO.score >= 8) {
+                feedback = "Setup desequilibrado. Tens uma placa excelente para um processador muito fraco.";
+                upgrade = "Troca esse processador por um Ryzen 7 ou 9 urgente.";
+            } else if(setup.CPU.score >= 8 && setup.MOBO.score <= 5) {
+                feedback = "Perigo! O processador é potente demais para esta motherboard (VRMs podem aquecer).";
+                upgrade = "Compra uma motherboard de série X ou B com melhor dissipação.";
+            } else if(avgScore < 5) {
+                feedback = "PC de escritório/entrada.";
+                upgrade = "Upgrade total para AM5 recomendado.";
             } else {
-                feedback = "Este é um PC de entrada/budget. Bom para tarefas básicas e jogos leves.";
-                melhoria = "Este CPU é o teu principal gargalo. Recomendamos um upgrade para a série 5000 (como o 5600X) para uma melhoria imediata sem mudar de board.";
+                feedback = "Setup sólido e equilibrado para Gaming.";
+                upgrade = "Adiciona 32GB de RAM DDR5 rápida.";
             }
 
-            evalContent.innerHTML = `
-                <div class="rating-score">${selectedCPU.score}/10</div>
-                <p><strong>Análise:</strong> ${feedback}</p>
-                <p><strong>O que melhorar:</strong> ${melhoria}</p>
-            `;
-            
-            // Scroll suave para a avaliação
-            evalSection.scrollIntoView({ behavior: 'smooth' });
+            textDiv.innerHTML = `<strong>Análise:</strong> ${feedback}<br><br><strong>Recomendação:</strong> ${upgrade}`;
         }
 
-        function reset() {
-            location.reload();
-        }
+        // Inicializar track vazio
+        createTrack();
     </script>
 </body>
 </html>
