@@ -1,1 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Component Pack Opener</title>
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --secondary: #0055ff;
+            --bg: #0a0a0c;
+            --card-bg: #1a1a1e;
+            --text: #ffffff;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 { text-shadow: 0 0 10px var(--primary); }
+
+        /* Estilo do Pack */
+        #pack-container {
+            margin: 40px 0;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        #pack-container:hover {
+            transform: scale(1.05);
+        }
+
+        .pack {
+            width: 200px;
+            height: 280px;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            border: 2px solid white;
+        }
+
+        /* Card do Componente Revelado */
+        #reveal-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .component-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--primary);
+            animation: fadeIn 0.5s ease-out;
+            max-width: 300px;
+        }
+
+        .component-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Avaliação */
+        #evaluation-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            max-width: 600px;
+            width: 100%;
+            display: none;
+        }
+
+        .rating-score {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        button {
+            background: var(--primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover { background: white; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Simulador de Packs PC</h1>
+    <p>Clica no pack para obteres o teu CPU!</p>
+
+    <div id="pack-container" onclick="openPack()">
+        <div class="pack">? PACK CPU ?</div>
+    </div>
+
+    <div id="reveal-area">
+        </div>
+
+    <div id="evaluation-section" id="evaluation-section">
+        <h2>Avaliação do Setup</h2>
+        <div id="evaluation-content"></div>
+        <button onclick="reset()">Tentar de Novo</button>
+    </div>
+
+    <script>
+        // Base de dados dos componentes (com os nomes de ficheiro que deste)
+        const cpus = [
+            { nome: "Ryzen 5 7600", img: "imagem_2026-03-30_150616518.png", score: 8, tier: "Mid-High" },
+            { nome: "Ryzen 5 5600X", img: "imagem_2026-03-30_150653377.png", score: 7, tier: "Mid" },
+            { nome: "Ryzen 5 9600X", img: "imagem_2026-03-30_150752972.png", score: 9, tier: "High" },
+            { nome: "Ryzen 3 3200G", img: "imagem_2026-03-30_150837692.png", score: 3, tier: "Entry" },
+            { nome: "Ryzen 7 5700X", img: "imagem_2026-03-30_150932786.png", score: 7.5, tier: "Mid-High" },
+            { nome: "Ryzen 7 5800X", img: "imagem_2026-03-30_151012046.png", score: 8, tier: "High-Mid" },
+            { nome: "Ryzen 9 9950X3D", img: "imagem_2026-03-30_151050470.png", score: 10, tier: "God Tier" }
+        ];
+
+        let selectedCPU = null;
+
+        function openPack() {
+            // Esconder o pack após clicar
+            document.getElementById('pack-container').style.display = 'none';
+            
+            // Escolher um CPU aleatório
+            const randomIndex = Math.floor(Math.random() * cpus.length);
+            selectedCPU = cpus[randomIndex];
+
+            // Mostrar o card
+            const revealArea = document.getElementById('reveal-area');
+            revealArea.innerHTML = `
+                <div class="component-card">
+                    <img src="${selectedCPU.img}" alt="${selectedCPU.nome}">
+                    <h3>${selectedCPU.nome}</h3>
+                    <p>Tier: ${selectedCPU.tier}</p>
+                    <button onclick="showEvaluation()">Ver Avaliação Final</button>
+                </div>
+            `;
+        }
+
+        function showEvaluation() {
+            const evalSection = document.getElementById('evaluation-section');
+            const evalContent = document.getElementById('evaluation-content');
+            evalSection.style.display = 'block';
+
+            let feedback = "";
+            let melhoria = "";
+
+            // Lógica de avaliação baseada no CPU
+            if (selectedCPU.score >= 9) {
+                feedback = "Este PC é uma besta de performance! Estás no topo da tecnologia atual.";
+                melhoria = "Honestamente? Quase nada. Apenas certifica-te de que tens um Cooler de 360mm e uma RTX 4090 para acompanhar.";
+            } else if (selectedCPU.score >= 7) {
+                feedback = "Um excelente PC para Gaming equilibrado e trabalho pesado.";
+                melhoria = "Se quiseres mais frames, no futuro podes saltar para a série 9000 ou garantir que a tua RAM é DDR5 (se o CPU suportar).";
+            } else {
+                feedback = "Este é um PC de entrada/budget. Bom para tarefas básicas e jogos leves.";
+                melhoria = "Este CPU é o teu principal gargalo. Recomendamos um upgrade para a série 5000 (como o 5600X) para uma melhoria imediata sem mudar de board.";
+            }
+
+            evalContent.innerHTML = `
+                <div class="rating-score">${selectedCPU.score}/10</div>
+                <p><strong>Análise:</strong> ${feedback}</p>
+                <p><strong>O que melhorar:</strong> ${melhoria}</p>
+            `;
+            
+            // Scroll suave para a avaliação
+            evalSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function reset() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>
